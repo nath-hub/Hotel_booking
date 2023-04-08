@@ -16,6 +16,7 @@ return new class extends Migration
             $table->unsignedBigInteger('bedroom_id');
             $table->date('start_date');
             $table->date('end_date');
+            $table->boolean('validated')->default(0);
 
             $table->index(['bedroom_id'], "fk_bedroom_people");
             $table->index(['booker_id'], "fk_people_bedroom");

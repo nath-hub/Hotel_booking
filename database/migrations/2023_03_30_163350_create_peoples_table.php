@@ -13,11 +13,11 @@ return new class extends Migration
     {
         Schema::create('peoples', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('booker_id');
-            $table->unsignedBigInteger('hotel_id');
+            $table->unsignedBigInteger('booker_id')->nullable();
+            $table->unsignedBigInteger('hotel_id')->nullable();
             $table->string('firstname');
             $table->string('lastname');
-            $table->enum('type', ['DIRECTOR', 'EMPLOYEE', 'CHILD', 'ADULT']);
+            $table->enum('type', ['DIRECTOR', 'RECEPTIONIST', 'CHILD', 'ADULT']);
 
             $table->index(["booker_id"], "fk_booker_people");
             $table->index(["hotel_id"], "fk_people_hotel");

@@ -5,10 +5,12 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-
 class People extends Model
 {
-   use HasFactory;
+    use HasFactory;
+
+    protected $table = "peoples";
+
 
    /**
     * The attributes that aren't mass assignable.
@@ -16,6 +18,8 @@ class People extends Model
     * @var array
     */
    protected $guarded = ['id'];
+
+
 
    public function hotel()
    {

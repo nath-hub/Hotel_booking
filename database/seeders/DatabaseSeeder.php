@@ -7,6 +7,7 @@ namespace Database\Seeders;
 use App\Models\Category;
 use App\Models\Hotel;
 use App\Models\People;
+use App\Models\User;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -17,16 +18,27 @@ class DatabaseSeeder extends Seeder
     public function run(): void
     {
         $hotel = Hotel::factory()
-        ->for(Category::factory())
-        ->create();
+            ->create();
 
-        $director = People::factory()->make([
-            'type' => 'DIRECTOR',
-        ])->for($hotel)->create();
-        
 
-        $employees = People::factory()->count(9)->make([
-            'type' => 'EMPLOYEE',
-        ])->for($hotel)->create();
+        $user = User::factory()->for(People::factory()->state([
+            'type' => 'DIRECTOR'
+        ])->for($hotel))->create();
+
+
+
+        $receptionist = User::factory()->for(People::factory()->state([
+            'type' => 'RECEPTIONIST',
+        ])->for($hotel))->create();
+
+
+        /* $director = People::factory()->state([
+            'type'=> 'DIRECTOR'
+        ])->for($hotel)->create(); */
+
+
+        /* $receptionist = People::factory()->count(2)->state([
+            'type' => 'RECEPTIONIST',
+        ])->for($hotel)->create(); */
     }
 }

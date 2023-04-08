@@ -17,7 +17,7 @@ return new class extends Migration
             $table->string('code');
             $table->integer('bed_number');
             $table->integer('price');
-
+            
             $table->index(["hotel_id"], "fk_bedroom_hotel");
 
             $table->foreign('hotel_id')->references('id')->on('hotels');
