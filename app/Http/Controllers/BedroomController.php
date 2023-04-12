@@ -2,17 +2,19 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Room;
+use App\Models\Bedroom;
 use Illuminate\Http\Request;
 
-class RoomController extends Controller
+class BedroomController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        //
+        $this->authorize('viewAny', Bedroom::class);
+            
+        return Bedroom::all();
     }
 
     /**
@@ -34,7 +36,7 @@ class RoomController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Room $room)
+    public function show(Bedroom $room)
     {
         //
     }
@@ -42,7 +44,7 @@ class RoomController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Room $room)
+    public function edit(Bedroom $room)
     {
         //
     }
@@ -50,16 +52,22 @@ class RoomController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Room $room)
+    public function update(Request $request, Bedroom $room, $id)
     {
-        //
+        $this->authorize('update', $room);
+
+        $bedroom=Bedroom::find($id);
+        $bedroom->update($request->all());
+        return $bedroom;
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Room $room)
+    public function destroy(Bedroom $room, $id)
     {
-        //
+        $this->authorize('delete', $room);
+
+        return Bedroom::destroy($id);
     }
 }

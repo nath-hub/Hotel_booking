@@ -17,7 +17,7 @@ return new class extends Migration
             $table->unsignedBigInteger('hotel_id')->nullable();
             $table->string('firstname');
             $table->string('lastname');
-            $table->enum('type', ['DIRECTOR', 'RECEPTIONIST', 'CHILD', 'ADULT']);
+            $table->enum('type', ['DIRECTOR', 'RECEPTIONIST', 'CHILD', 'ADULT', 'SUPERADMIN']);
 
             $table->index(["booker_id"], "fk_booker_people");
             $table->index(["hotel_id"], "fk_people_hotel");

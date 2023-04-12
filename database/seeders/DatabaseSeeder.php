@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 
+use App\Models\Bedroom;
 use App\Models\Category;
 use App\Models\Hotel;
 use App\Models\People;
@@ -30,6 +31,12 @@ class DatabaseSeeder extends Seeder
         $receptionist = User::factory()->for(People::factory()->state([
             'type' => 'RECEPTIONIST',
         ])->for($hotel))->create();
+
+        $admin = User::factory()->for(People::factory()->state([
+            'type' => 'SUPERADMIN',
+        ])->for($hotel))->create();
+
+        $bedroom = Bedroom::factory()->count(5)->create();
 
 
         /* $director = People::factory()->state([

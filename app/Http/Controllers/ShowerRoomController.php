@@ -2,7 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Shower_room;
+use App\Http\Requests\ShowerRoomRequest;
+use App\Models\ShowerRoom;
 use Illuminate\Http\Request;
 
 class ShowerRoomController extends Controller
@@ -12,7 +13,9 @@ class ShowerRoomController extends Controller
      */
     public function index()
     {
-        //
+        $this->authorize('viewAny', ShowerRoom::class);
+            
+        return ShowerRoom::all();
     }
 
     /**
@@ -26,15 +29,17 @@ class ShowerRoomController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(ShowerRoomRequest $request)
     {
-        //
+        $this->authorize('create', ShowerRoom::class);
+
+        $people = ShowerRoom::create($request->all());
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(Shower_room $shower_room)
+    public function show(ShowerRoom $shower_room)
     {
         //
     }
@@ -42,7 +47,7 @@ class ShowerRoomController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Shower_room $shower_room)
+    public function edit(ShowerRoom $shower_room)
     {
         //
     }
@@ -50,16 +55,22 @@ class ShowerRoomController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Shower_room $shower_room)
+    public function update(Request $request, ShowerRoom $shower_room, $id)
     {
-        //
+        $this->authorize('update', $shower_room);
+
+        $shower_room=ShowerRoom::find($id);
+        $shower_room->update($request->all());
+        return $shower_room;
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Shower_room $shower_room)
+    public function destroy(ShowerRoom $shower_room, $id)
     {
-        //
+        $this->authorize('delete', $shower_room);
+
+        return ShowerRoom::destroy($id);
     }
 }
