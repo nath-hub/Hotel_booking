@@ -1,9 +1,7 @@
 <?php
 
 use App\Http\Controllers\AuthController;
-use App\Http\Controllers\BedroomController;
-use App\Http\Controllers\PeopleController;
-use Illuminate\Http\Request;
+use App\Http\Controllers\ReceptionistController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -17,12 +15,8 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
+Route::get('auth/login', [AuthController::class, 'login'])->name('login');
+
+Route::middleware('auth:sanctum')->group(function () {
+    Route::post('receptionists/create', [ReceptionistController::class, 'store'])->name('receptionists.store');
 });
-
-Route::post('auth/login', [AuthController::class, 'login'])->name('login');
-
-Route::get('get', [BedroomController::class, 'index'])->name('get')->middleware(["auth:sanctum"]);
-
-Route::post('post', [PeopleController::class, 'store'])->middleware(["auth:sanctum"]);

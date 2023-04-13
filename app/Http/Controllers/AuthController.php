@@ -3,10 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\LoginRequest;
-use App\Models\User;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Hash;
+use Carbon\Carbon;
 
 class AuthController extends Controller
 {
@@ -14,11 +12,11 @@ class AuthController extends Controller
     {
         $data = $request->validated();
 
-        $user = User::firstWhere('email', $data['email']);
+        if (Auth::attempt($data)) {
 
-        if (Hash::check($data['password'], $user->password)) {
+            $user = $request->user();
 
-            $token = $user->createToken('API TOKEN')->plainTextToken;
+            $token = $user->createToken('API TOKEN');
 
             $people = $user->people;
 
@@ -27,7 +25,8 @@ class AuthController extends Controller
                 'data' => [
                     'token' => [
                         'type' => 'Bearer',
-                        'access_token' => $token
+                        'expires_at' =>  Carbon::parse($token->accessToken->expires_at),
+                        'access_token' => $token->plainTextToken
                     ],
                     'user' => [
                         'username' => $user->name,

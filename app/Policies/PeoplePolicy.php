@@ -4,63 +4,22 @@ namespace App\Policies;
 
 use App\Models\People;
 use App\Models\User;
-use Illuminate\Auth\Access\Response;
 
 class PeoplePolicy
 {
     /**
-     * Determine whether the user can view any models.
+     * Create a new policy instance.
      */
-    public function viewAny(User $user)
+    public function __construct()
     {
-        return $user;
+        //
     }
 
     /**
-     * Determine whether the user can view the model.
+     * Determine if the user can create a receptionist.
      */
-    public function view(User $user, People $people)
+    public function createReceptionist(User $user): bool
     {
-        return $user;
-    }
-
-    /**
-     * Determine whether the user can create models.
-     */
-    public function create(User $user)
-    {
-        return $user->people->type == "DIRECTOR";
-    }
-
-    /**
-     * Determine whether the user can update the model.
-     */
-    public function update(User $user, People $people)
-    {
-        return $user->people->type == "DIRECTOR";
-    }
-
-    /**
-     * Determine whether the user can delete the model.
-     */
-    public function delete(User $user, People $people)
-    {
-        return $user->people->type == "DIRECTOR";
-    }
-
-    /**
-     * Determine whether the user can restore the model.
-     */
-    public function restore(User $user, People $people)
-    {
-        return $user->people->type == "SUPERADMIN";
-    }
-
-    /**
-     * Determine whether the user can permanently delete the model.
-     */
-    public function forceDelete(User $user, People $people)
-    {
-        return $user->people->type == "SUPERADMIN";
+        return $user->people->type === 'DIRECTOR';
     }
 }
