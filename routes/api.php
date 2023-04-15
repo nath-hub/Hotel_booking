@@ -1,7 +1,7 @@
 <?php
 
 use App\Http\Controllers\AuthController;
-use App\Http\Controllers\ReceptionistController;
+use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -18,5 +18,8 @@ use Illuminate\Support\Facades\Route;
 Route::get('auth/login', [AuthController::class, 'login'])->name('login');
 
 Route::middleware('auth:sanctum')->group(function () {
-    Route::post('receptionists/create', [ReceptionistController::class, 'store'])->name('receptionists.store');
+    Route::post('users/create', [UserController::class, 'store'])->name('users.store');
+    Route::put('users/{user}', [UserController::class, 'update'])->name('users.update');
 });
+
+Route::post('bookers/create', [BookerController::class, 'store'])->name('bookers.store');

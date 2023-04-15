@@ -21,31 +21,15 @@ class DatabaseSeeder extends Seeder
         $hotel = Hotel::factory()
             ->create();
 
-
         $user = User::factory()->for(People::factory()->state([
             'type' => 'DIRECTOR'
         ])->for($hotel))->create();
-
-
 
         $receptionist = User::factory()->for(People::factory()->state([
             'type' => 'RECEPTIONIST',
         ])->for($hotel))->create();
 
-        $admin = User::factory()->for(People::factory()->state([
-            'type' => 'SUPERADMIN',
-        ])->for($hotel))->create();
-
-        $bedroom = Bedroom::factory()->count(5)->create();
-
-
-        /* $director = People::factory()->state([
-            'type'=> 'DIRECTOR'
-        ])->for($hotel)->create(); */
-
-
-        /* $receptionist = People::factory()->count(2)->state([
-            'type' => 'RECEPTIONIST',
-        ])->for($hotel)->create(); */
+        #ToDo : Take into account the cration of showers foreach bedroom
+        // $bedroom = Bedroom::factory()->count(5)->create();
     }
 }

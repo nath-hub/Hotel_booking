@@ -7,7 +7,7 @@ use Illuminate\Support\Collection;
 use App\Models\User;
 use App\Models\People;
 
-class ReceptionistService
+class UserService
 {
 
     /**
@@ -39,5 +39,30 @@ class ReceptionistService
             'receptionist' => $people->toArray(),
             'account' => $user->toArray()
         ];
+    }
+
+    /**
+     * Update a receptionist
+     * 
+     * @param User $user the a receptionnist who updates his data
+     * @param array $input The receptionist data
+     * 
+     * @return void
+     */
+    public function update(User $user, People $people, array $input): void
+    {
+
+        $input = collect($input);
+
+        $receptionistData = $input->except(['username', 'email', 'password', 'avatar_path'])->all();
+        $userData = $input->except(['firstname', 'lastname'])->all();
+
+        if (isset($userData['password'])) {
+            $userData['password'] = Hash::make($userData['password']);
+        }
+
+        $people->update($receptionistData);
+
+        $user->update($userData);
     }
 }

@@ -2,13 +2,13 @@
 
 namespace App\Services\Facades;
 
-use App\Services\ReceptionistService;
+use App\Services\UserService;
 use Illuminate\Support\Facades\Facade;
 
 /**
  * Facade for user service
  */
-class ReceptionistFacade extends Facade
+class UserFacade extends Facade
 {
 
     /**
@@ -18,6 +18,6 @@ class ReceptionistFacade extends Facade
      */
     protected static function getFacadeAccessor()
     {
-        return ReceptionistService::class;
+        return UserService::class;
     }
 }
