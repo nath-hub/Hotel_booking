@@ -35,7 +35,7 @@ class BedroomPolicy
     /**
      * Determine whether the user can update the model.
      */
-    public function update(User $user, Bedroom $bedroom)
+    public function update(User $user)
     {
         return $user->is_director;
     }

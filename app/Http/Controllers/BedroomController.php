@@ -49,12 +49,14 @@ class BedroomController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Bedroom $room, $id)
+    public function update(BedroomRequest $request, Bedroom $bedroom)
     {
-        $this->authorize('update', $room);
+        $this->authorize('update', Bedroom::class);
 
-        $bedroom = Bedroom::find($id);
-        $bedroom->update($request->all());
+        $input = $request->validated();
+
+        $bedroom = BedroomService::update($bedroom, $input);
+        
         return $bedroom;
     }
 

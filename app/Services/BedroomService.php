@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Http\Requests\BedroomRequest;
 use App\Models\Bedroom;
 use Illuminate\Support\Collection;
 use App\Models\User;
@@ -38,5 +39,20 @@ class BedroomService
         ];
     }
 
-    
+    public function update(Bedroom $bedroomToUpdate, array $input){
+
+
+        $input = collect($input);
+
+        $bedroomData = $input->only(['code', 'bed_number', 'price', 'hotel_id'])->all();
+        $showerRoomData = $input->only(['type'])->all();
+
+        $bedroomToUpdate->update($bedroomData);
+
+        $bedroomToUpdate->showerRoom()->create($showerRoomData);
+
+        return [
+            "code"=>204
+        ];
+    }
 }

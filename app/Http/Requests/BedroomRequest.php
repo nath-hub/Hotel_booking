@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class BedroomRequest extends FormRequest
 {
@@ -27,7 +28,7 @@ class BedroomRequest extends FormRequest
         if ($verb === "POST") {
 
             return [
-                "code" => "required|string",
+                "code" => "required|string|unique:bedrooms",
                 "bed_number" => "required|integer",
                 "price" => "required|integer",
                 "type" => "required|in:SHOWER,BATHTUB",
@@ -35,9 +36,15 @@ class BedroomRequest extends FormRequest
         } else {
 
             return [
-                "bed_number" => "integer",
-                "price" => "integer",
-                "type" => "string"
+               
+                "code" =>  [
+                    'sometimes',
+                    'required',
+                    Rule::unique('bedrooms')->ignore($this->bedroom->id),
+                ],
+                "bed_number" => "sometimes|required|integer",
+                "price" => "sometimes|required|integer",
+                "type" => "sometimes|required|in:SHOWER,BATHTUB",
             ];
         }
     }
