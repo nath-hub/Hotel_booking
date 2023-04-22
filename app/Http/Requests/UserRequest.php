@@ -23,6 +23,7 @@ class UserRequest extends FormRequest
      */
     public function rules(): array
     {
+
         $verb = $this->method();
 
         if ($verb === 'POST') {
@@ -52,6 +53,7 @@ class UserRequest extends FormRequest
                     'required',
                     Rule::unique('users')->ignore($user->id),
                 ],
+               
                 'password' => 'sometimes|required|string',
                 'avatar_path' => 'sometimes|required|string',
             ];

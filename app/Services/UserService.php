@@ -18,26 +18,25 @@ class UserService
      * 
      * @return array The newly created data of the receptionist
      */
-    public function store(User $user, array $input): array
+    public function store(?User $user, array $input): array
     {
 
         $input = collect($input)->merge([
-            'type' => 'RECEPTIONIST',
-            'hotel_id' => $user->people->hotel_id
+            'hotel_id' => $user?->people->hotel_id
         ]);
 
-        $receptionistData = $input->only(['firstname', 'lastname', 'type', 'hotel_id'])->all();
+        $peopleData = $input->only(['firstname', 'lastname', 'type', 'hotel_id'])->all();
         $userData = $input->only(['username', 'email', 'password', 'avatar_path'])->all();
 
         $userData['password'] = Hash::make($userData['password']);
 
-        $people = People::create($receptionistData);
+        $people = People::create($peopleData);
 
         $user = $people->user()->create($userData);
 
         return [
-            'receptionist' => $people->toArray(),
-            'account' => $user->toArray()
+            'people' => $people,
+            'account' => $user
         ];
     }
 
@@ -49,20 +48,39 @@ class UserService
      * 
      * @return void
      */
-    public function update(User $user, People $people, array $input): void
+    public function update(User $userAuthenticated, User $userToUpdate, array $input): void
     {
 
         $input = collect($input);
 
-        $receptionistData = $input->except(['username', 'email', 'password', 'avatar_path'])->all();
+        $peopleData = $input->except(['username', 'email', 'password', 'avatar_path'])->all();
         $userData = $input->except(['firstname', 'lastname'])->all();
 
-        if (isset($userData['password'])) {
+        if (isset($userData['password']) && ($userAuthenticated->id === $userToUpdate->id)) {
             $userData['password'] = Hash::make($userData['password']);
+        } elseif (isset($userData['password']) && ($userAuthenticated->id !== $userToUpdate->id)) {
+            dd('error');
         }
 
-        $people->update($receptionistData);
+        $userToUpdate->update($userData);
 
-        $user->update($userData);
+        $userToUpdate->people()->update($peopleData);
     }
+
+
+
+     /**
+     * Delete a receptionist
+     * 
+     * @param User $user a director who delete a receptionist
+     * @param array $input The receptionist id
+     * 
+     * @return void
+     */
+    public function delete(User $userAuthenticated, User $userToDelete)
+    {
+        $userToDelete->delete();
+        $userToDelete->people()->delete();
+    }
+
 }

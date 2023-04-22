@@ -21,11 +21,24 @@ class BedroomRequest extends FormRequest
      */
     public function rules(): array
     {
-        return [
-            "code"=>"required|string",
-            "bed_number"=>"required|integer",
-            "price"=>"required|integer",
-            "hotel_id"=>"required|integer"
-        ];
+
+        $verb = $this->method();
+
+        if ($verb === "POST") {
+
+            return [
+                "code" => "required|string",
+                "bed_number" => "required|integer",
+                "price" => "required|integer",
+                "type" => "required|in:SHOWER,BATHTUB",
+            ];
+        } else {
+
+            return [
+                "bed_number" => "integer",
+                "price" => "integer",
+                "type" => "string"
+            ];
+        }
     }
 }

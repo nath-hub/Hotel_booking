@@ -19,7 +19,20 @@ class UserPolicy
      */
     public function createReceptionist(User $user): bool
     {
-        return $user->people->type === 'DIRECTOR';
+        return $user->is_director;
+    }
+
+
+    /**
+     * Determine if the user can create a booker.
+     */
+    public function createBooker(?User $user): bool
+    {
+        if ($user === null) {
+            return true;
+        }else{
+            return $user->is_director || $user->is_receptionist;
+        }
     }
 
     /**
@@ -27,8 +40,16 @@ class UserPolicy
      */
     public function update(User $user, User $userToUpdate): bool
     {
-        return $user->people->type === 'DIRECTOR' && $userToUpdate->people->type !== 'DIRECTOR' ||
-        $user->people->type === 'RECEPTIONIST' && $userToUpdate->people->type === 'ADULT' ||
-        $user->id === $userToUpdate->id;
+        return $user->is_director && $userToUpdate->people->type !== 'DIRECTOR' ||
+            $user->is_receptionist && $userToUpdate->people->type === 'ADULT' ||
+            $user->id === $userToUpdate->id;
+    }
+
+    /**
+     * Verify if user can delete his account of receptionist
+     */
+    public function delete(User $user, User $userToDelete)
+    {
+        return $user->is_director && $userToDelete->is_receptionist;
     }
 }

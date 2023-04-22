@@ -19,6 +19,8 @@ return new class extends Migration
             $table->index(['bedroom_id'], "fk_showerroom_bedroom");
             
             $table->foreign('bedroom_id')->references('id')->on('bedrooms');
+            
+            $table->softDeletes();
             $table->timestamps();
         });
     }

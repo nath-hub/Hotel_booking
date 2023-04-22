@@ -1,8 +1,10 @@
 <?php
 
-use App\Http\Controllers\AuthController;
-use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\AuthController;
+use App\Http\Controllers\BedroomController;
+use App\Http\Controllers\UserController;
+use App\Http\Controllers\BookerController;
 
 /*
 |--------------------------------------------------------------------------
@@ -18,8 +20,12 @@ use Illuminate\Support\Facades\Route;
 Route::get('auth/login', [AuthController::class, 'login'])->name('login');
 
 Route::middleware('auth:sanctum')->group(function () {
-    Route::post('users/create', [UserController::class, 'store'])->name('users.store');
-    Route::put('users/{user}', [UserController::class, 'update'])->name('users.update');
+
+    Route::apiResource('users', UserController::class)->except(['index', 'show']);
+
+    Route::apiResource('bedrooms', BedroomController::class)->except(['index', 'show']);
+
+    // Route::apiResource('bookers', BookerController::class)->except(['index', 'create', 'show']);
 });
 
 Route::post('bookers/create', [BookerController::class, 'store'])->name('bookers.store');

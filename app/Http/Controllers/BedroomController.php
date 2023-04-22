@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\BedroomRequest;
 use App\Models\Bedroom;
 use Illuminate\Http\Request;
+use App\Services\Facades\BedroomFacade as BedroomService;
 
 class BedroomController extends Controller
 {
@@ -13,24 +15,27 @@ class BedroomController extends Controller
     public function index()
     {
         $this->authorize('viewAny', Bedroom::class);
-            
-        return Bedroom::all();
-    }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
+        return Bedroom::all();
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(BedroomRequest $request)
     {
-        //
+        $this->authorize('create', Bedroom::class);
+
+        $input = $request->validated();
+
+        $userAuthenticated = $request->user();
+
+        $data = BedroomService::store($userAuthenticated, $input);
+
+        return [
+            'code' => 201,
+            'data' => $data,
+        ];
     }
 
     /**
@@ -42,21 +47,13 @@ class BedroomController extends Controller
     }
 
     /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Bedroom $room)
-    {
-        //
-    }
-
-    /**
      * Update the specified resource in storage.
      */
     public function update(Request $request, Bedroom $room, $id)
     {
         $this->authorize('update', $room);
 
-        $bedroom=Bedroom::find($id);
+        $bedroom = Bedroom::find($id);
         $bedroom->update($request->all());
         return $bedroom;
     }

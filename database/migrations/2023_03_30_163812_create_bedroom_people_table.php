@@ -23,6 +23,7 @@ return new class extends Migration
 
             $table->foreign('booker_id')->references('id')->on('peoples');
             $table->foreign('bedroom_id')->references('id')->on('bedrooms');
+
             $table->timestamps();
         });
     }

@@ -24,6 +24,7 @@ return new class extends Migration
 
             $table->foreign('booker_id')->references('id')->on('peoples');
             $table->foreign('hotel_id')->references('id')->on('hotels');
+            $table->softDeletes();
             $table->timestamps();
         });
     }
