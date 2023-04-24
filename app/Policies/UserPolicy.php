@@ -41,7 +41,7 @@ class UserPolicy
     public function update(User $user, User $userToUpdate): bool
     {
         return $user->is_director && $userToUpdate->people->type !== 'DIRECTOR' ||
-            $user->is_receptionist && $userToUpdate->people->type === 'ADULT' ||
+            $user->is_receptionist && $userToUpdate->is_booker ||
             $user->id === $userToUpdate->id;
     }
 

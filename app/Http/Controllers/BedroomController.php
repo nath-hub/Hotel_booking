@@ -56,7 +56,7 @@ class BedroomController extends Controller
         $input = $request->validated();
 
         $bedroom = BedroomService::update($bedroom, $input);
-        
+
         return $bedroom;
     }
 

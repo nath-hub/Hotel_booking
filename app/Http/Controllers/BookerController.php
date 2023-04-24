@@ -49,9 +49,17 @@ class BookerController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(UserRequest $request, User $user)
     {
-        
+        $this->authorize('update', $user);
+
+        $input = $request->validated();
+
+        $userAuthenticated = $request->user();
+
+        UserService::update($userAuthenticated, $user, $input);
+
+        return response()->json([], 204);
     }
 
     /**

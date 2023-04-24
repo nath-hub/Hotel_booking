@@ -5,6 +5,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\BedroomController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\BookerController;
+use App\Http\Controllers\BookingController;
 
 /*
 |--------------------------------------------------------------------------
@@ -25,7 +26,9 @@ Route::middleware('auth:sanctum')->group(function () {
 
     Route::apiResource('bedrooms', BedroomController::class)->except(['index', 'show']);
 
-    // Route::apiResource('bookers', BookerController::class)->except(['index', 'create', 'show']);
+    Route::apiResource('bookers', BookerController::class)->except(['index', 'store', 'show', 'destroy']);
+
+    Route::apiResource('bookings', BookingController::class)->except(['index', 'destroy']);
 });
 
 Route::post('bookers/create', [BookerController::class, 'store'])->name('bookers.store');

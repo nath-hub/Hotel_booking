@@ -53,11 +53,11 @@ class UserRequest extends FormRequest
                     'required',
                     Rule::unique('users')->ignore($user->id),
                 ],
-               
                 'password' => 'sometimes|required|string',
                 'avatar_path' => 'sometimes|required|string',
             ];
         }
         
+        return [];
     }
 }

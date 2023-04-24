@@ -56,10 +56,12 @@ class UserService
         $peopleData = $input->except(['username', 'email', 'password', 'avatar_path'])->all();
         $userData = $input->except(['firstname', 'lastname'])->all();
 
-        if (isset($userData['password']) && ($userAuthenticated->id === $userToUpdate->id)) {
+        if (isset($userData['password'])) {
+            if ($userAuthenticated->id !== $userToUpdate->id) {
+                abort(401); #ToDo: Check if abort function works
+            }
+
             $userData['password'] = Hash::make($userData['password']);
-        } elseif (isset($userData['password']) && ($userAuthenticated->id !== $userToUpdate->id)) {
-            dd('error');
         }
 
         $userToUpdate->update($userData);

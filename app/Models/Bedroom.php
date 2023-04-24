@@ -18,6 +18,11 @@ class Bedroom extends Model
     protected $guarded = ['id'];
 
 
+    public function hotel()
+    {
+        return $this->belongsTo(Hotel::class);
+    }
+
     public function showerRoom()
     {
         return $this->hasOne(ShowerRoom::class);
@@ -27,5 +32,4 @@ class Bedroom extends Model
     {
         return $this->belongsToMany(People::class)->withPivot('start_date', 'end_date')->withTimestamps();
     }
-
 }

@@ -36,7 +36,6 @@ class BedroomRequest extends FormRequest
         } else {
 
             return [
-               
                 "code" =>  [
                     'sometimes',
                     'required',
@@ -47,5 +46,7 @@ class BedroomRequest extends FormRequest
                 "type" => "sometimes|required|in:SHOWER,BATHTUB",
             ];
         }
+
+        return [];
     }
 }

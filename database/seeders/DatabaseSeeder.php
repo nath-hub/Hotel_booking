@@ -29,6 +29,13 @@ class DatabaseSeeder extends Seeder
             'type' => 'RECEPTIONIST',
         ])->for($hotel))->create();
 
+        $booker = User::factory()->for(People::factory()->state([
+            'type' => 'ADULT',
+            'hotel_id' => null,
+        ])->for($hotel))->create();
+
+        $bedrooms = Bedroom::factory()->count(5)->for($hotel)->create();
+
         #ToDo : Take into account the cration of showers foreach bedroom
         // $bedroom = Bedroom::factory()->count(5)->create();
     }

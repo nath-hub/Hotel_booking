@@ -29,7 +29,7 @@ class AuthController extends Controller
                         'access_token' => $token->plainTextToken
                     ],
                     'user' => [
-                        'username' => $user->name,
+                        'username' => $user->username,
                         'email' => $user->email,
                         'firstname' => $people->firstname,
                         'lastname' => $people->lastname,
