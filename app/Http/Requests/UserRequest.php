@@ -36,6 +36,14 @@ class UserRequest extends FormRequest
                 'password' => 'required|string',
                 'avatar_path' => 'required|string',
             ];
+        } elseif ($verb === 'GET') {
+            
+            return [
+                'username' => 'string',
+                'firstname' => 'string',
+                'lastname' => 'string',
+                'email' => 'string'
+            ];
         } else {
 
             $user = $this->user();

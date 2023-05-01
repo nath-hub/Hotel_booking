@@ -14,6 +14,23 @@ class UserController extends Controller
     /**
      * Display a listing of the resource.
      */
+    public function index(UserRequest $request)
+    {
+
+        $this->authorize('index', User::class);
+
+        $input = $request->validated();
+
+        $input['type'] = 'RECEPTIONIST';
+
+        $userAuthenticated = $request->user();
+
+        return UserService::index($userAuthenticated, $input);
+    }
+
+    /**
+     * Display a listing of the resource.
+     */
     public function store(UserRequest $request)
     {
 

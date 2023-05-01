@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
+use Illuminate\Database\Eloquent\Builder;
 
 
 class User extends Authenticatable
@@ -39,13 +40,26 @@ class User extends Authenticatable
      * @var array<string, string>
      */
     protected $casts = [
+        'created_at' => 'datetime',
         'email_verified_at' => 'datetime',
     ];
+
+    /*
+    |--------------------------------------------------------------------------
+    | Relationships
+    |--------------------------------------------------------------------------
+    */
 
     public function people()
     {
         return $this->belongsTo(People::class);
     }
+
+    /*
+    |--------------------------------------------------------------------------
+    | Accessors
+    |--------------------------------------------------------------------------
+    */
 
     /**
      * Determines if the user is a director
@@ -57,7 +71,7 @@ class User extends Authenticatable
         return $this->people->type === 'DIRECTOR';
     }
 
-        /**
+    /**
      * Determines if the user is a receptionist
      * 
      * @return string 
@@ -67,7 +81,7 @@ class User extends Authenticatable
         return $this->people->type === 'RECEPTIONIST';
     }
 
-        /**
+    /**
      * Determines if the user is a booker
      * 
      * @return string 
@@ -77,4 +91,35 @@ class User extends Authenticatable
         return $this->people->type !== "CHILD" && $this->people->booker_id === null;
     }
 
+    /*
+    |--------------------------------------------------------------------------
+    | Scopes
+    |--------------------------------------------------------------------------
+    */
+
+    public function scopeFilter(Builder $query, array $filters)
+    {
+
+        $query->when($filters['username'] ?? null, function ($query, $username) {
+
+            $query->where('username', 'like', '%' . $username . '%');
+
+        })->when($filters['email'] ?? null, function ($query, $email) {
+
+            $query->where('email', 'like', '%' . $email . '%');
+
+        })->whereHas('people', function ($query) use ($filters) {
+
+            $query->when($filters['hotel_id'] ?? null, function ($query, $hotelId) {
+                $query->where('hotel_id',  $hotelId);
+            })->when($filters['type'] ?? null, function ($query, $type) {
+                $query->where('type', $type);
+            })->when($filters['firstname'] ?? null, function ($query, $firstname) {
+                $query->where('firstname', 'like', '%' . $firstname . '%');
+            })->when($filters['lastname'] ?? null, function ($query, $lastname) {
+                $query->where('lastname', 'like', '%' . $lastname . '%');
+            });
+
+        });
+    }
 }
