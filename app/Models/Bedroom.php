@@ -18,6 +18,15 @@ class Bedroom extends Model
      */
     protected $guarded = ['id'];
 
+    /**
+     * The attributes that should be cast.
+     *
+     * @var array<string, string>
+     */
+    protected $casts = [
+        'created_at' => 'datetime',
+    ];
+
 
     public function hotel()
     {
@@ -44,13 +53,13 @@ class Bedroom extends Model
     {
         $query->when($filterCriteria['code'] ?? null, function ($query, $code) {
             $query->where('code', 'like', '%' . $code . '%');
-        })->when($filterCriteria['bed_number'] ?? null, function ($q, $bed_number) {
-            $q->where('bed_number', $bed_number);
-        })->when($filterCriteria['price'] ?? null, function ($que, $price) {
-            $que->where('price', '<=', $price);
+        })->when($filterCriteria['bed_number'] ?? null, function ($query, $bed_number) {
+            $query->where('bed_number', $bed_number);
+        })->when($filterCriteria['price'] ?? null, function ($query, $price) {
+            $query->where('price', '<=', $price);
         })->whereHas('showerRoom', function ($query) use ($filterCriteria){
-            $query->when($filterCriteria['type'] ?? null, function($q, $type){
-                $q->where('type', $type);
+            $query->when($filterCriteria['type'] ?? null, function($query, $type){
+                $query->where('type', $type);
             });
         });
     }

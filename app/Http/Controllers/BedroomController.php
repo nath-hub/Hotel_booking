@@ -12,7 +12,7 @@ class BedroomController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index(BedroomRequest $request, Bedroom $bedroom)
+    public function index(BedroomRequest $request)
     {
         $this->authorize('index', Bedroom::class);
 
@@ -20,7 +20,7 @@ class BedroomController extends Controller
 
         $userAuthenticated = $request->user();
 
-        return BedroomService::index($userAuthenticated,$bedroom, $input);
+        return BedroomService::index($userAuthenticated, $input);
     }
 
     /**

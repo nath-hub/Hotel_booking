@@ -8,6 +8,7 @@ use App\Models\Bedroom;
 use App\Models\Category;
 use App\Models\Hotel;
 use App\Models\People;
+use App\Models\ShowerRoom;
 use App\Models\User;
 use Illuminate\Database\Seeder;
 
@@ -38,9 +39,8 @@ class DatabaseSeeder extends Seeder
             ])->for($hotel))->create();
         }
 
-        $bedrooms = Bedroom::factory()->count(5)->for($hotel)->create();
+        // $bedrooms = Bedroom::factory()->for(ShowerRoom::factory())->for($hotel)->create();
 
-        #ToDo : Take into account the creation of showers foreach bedroom
-        // $bedroom = Bedroom::factory()->count(5)->create();
+        $showerRoom = ShowerRoom::factory()->count(5)->create();
     }
 }

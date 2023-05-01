@@ -21,29 +21,26 @@ class BedroomService
      * 
      * @return array The list data of the bedroom
      */
-    public function index(User $user, Bedroom $bedroom, array $input): Paginator
+    public function index(User $user, array $input): Paginator
     {
 
         $hotelId = $user->people->hotel_id;
 
         $input['hotel_id'] = $hotelId;
 
-        return Bedroom::with("showerRoom")
-            ->where('id', '<>', $user->id)
+        return Bedroom::with('showerRoom')
             ->filter($input)
             ->orderBy('code')
             ->paginate(10)
             ->withQueryString()
-            ->through(
-                fn ($bedroom) => [
-                    'id' => $bedroom->id,
-                    'code' => $bedroom->code,
-                    'bed_number' => $bedroom->bed_number,
-                    'price' => $bedroom->price,
-                    'type' => $bedroom->showerRoom->type,
-                    'created_at' => $bedroom->created_at?->format('Y-m-d')
-                ]
-            );
+            ->through(fn ($bedroom) => [
+                'id' => $bedroom->id,
+                'code' => $bedroom->code,
+                'bed_number' => $bedroom->bed_number,
+                'price' => $bedroom->price,
+                'type' => $bedroom->showerRoom->type,
+                'created_at' => $bedroom->created_at?->format('Y-m-d')
+            ]);
     }
 
     /**

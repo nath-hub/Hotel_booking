@@ -25,32 +25,33 @@ class BedroomRequest extends FormRequest
 
         $verb = $this->method();
 
-        if ($verb === "POST") {
+        if ($verb === 'POST') {
 
             return [
-                "code" => "required|string|unique:bedrooms",
-                "bed_number" => "required|integer",
-                "price" => "required|integer",
-                "type" => "required|in:SHOWER,BATHTUB",
+                'code' => 'required|string|unique:bedrooms',
+                'bed_number' => 'required|integer',
+                'price' => 'required|integer',
+                'type' => 'required|in:SHOWER,BATHTUB',
             ];
-        } elseif ($verb === "GET") {
+        } elseif ($verb === 'GET') {
+
             return [
-                "code" => "string",
-                "bed_number" => "integer",
-                "price" => "integer",
-                "type" => "in:SHOWER,BATHTUB"
+                'code' => 'string',
+                'bed_number' => 'integer',
+                'price' => 'integer',
+                'type' => 'in:SHOWER,BATHTUB'
             ];
         } else {
 
             return [
-                "code" =>  [
+                'code' =>  [
                     'sometimes',
                     'required',
                     Rule::unique('bedrooms')->ignore($this->bedroom->id),
                 ],
-                "bed_number" => "sometimes|required|integer",
-                "price" => "sometimes|required|integer",
-                "type" => "sometimes|required|in:SHOWER,BATHTUB",
+                'bed_number' => 'sometimes|required|integer',
+                'price' => 'sometimes|required|integer',
+                'type' => 'sometimes|required|in:SHOWER,BATHTUB',
             ];
         }
 

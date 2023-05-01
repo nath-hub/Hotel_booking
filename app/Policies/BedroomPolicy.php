@@ -13,7 +13,8 @@ class BedroomPolicy
      */
     public function index(User $user)
     {
-        return $user->is_director;
+        #ToDo: See what we nned to do later
+        return true;
     }
 
     /**
