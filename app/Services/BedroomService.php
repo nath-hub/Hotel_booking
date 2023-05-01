@@ -49,7 +49,7 @@ class BedroomService
 
         $bedroomToUpdate->update($bedroomData);
 
-        $bedroomToUpdate->showerRoom()->create($showerRoomData);
+        $bedroomToUpdate->showerRoom()->update($showerRoomData);
 
         return [
             "code"=>204
