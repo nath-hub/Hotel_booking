@@ -24,7 +24,7 @@ Route::middleware('auth:sanctum')->group(function () {
 
     Route::apiResource('users', UserController::class)->except(['show']);
 
-    Route::apiResource('bedrooms', BedroomController::class)->except(['index', 'show']);
+    Route::apiResource('bedrooms', BedroomController::class)->except(['show']);
 
     Route::apiResource('bookers', BookerController::class)->except(['index', 'store', 'show', 'destroy']);
 

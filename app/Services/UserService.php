@@ -10,7 +10,14 @@ use Illuminate\Contracts\Pagination\Paginator;
 
 class UserService
 {
-
+    /**
+     * list a receptionist
+     * 
+     * @param User $user the Director who create a receptionnist
+     * @param array $input The receptionist data
+     * 
+     * @return array The newly created data of the receptionist
+     */
     public function index(User $user, array $input): Paginator
     {
 

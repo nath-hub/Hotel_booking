@@ -11,9 +11,9 @@ class BedroomPolicy
     /**
      * Determine whether the user can view any models.
      */
-    public function viewAny(User $user)
+    public function index(User $user)
     {
-        //
+        return $user->is_director;
     }
 
     /**

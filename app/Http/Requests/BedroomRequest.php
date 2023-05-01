@@ -33,6 +33,13 @@ class BedroomRequest extends FormRequest
                 "price" => "required|integer",
                 "type" => "required|in:SHOWER,BATHTUB",
             ];
+        } elseif ($verb === "GET") {
+            return [
+                "code" => "string",
+                "bed_number" => "integer",
+                "price" => "integer",
+                "type" => "in:SHOWER,BATHTUB"
+            ];
         } else {
 
             return [

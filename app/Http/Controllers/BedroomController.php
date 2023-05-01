@@ -12,11 +12,15 @@ class BedroomController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(BedroomRequest $request, Bedroom $bedroom)
     {
-        $this->authorize('viewAny', Bedroom::class);
+        $this->authorize('index', Bedroom::class);
 
-        return Bedroom::all();
+        $input = $request->validated();
+
+        $userAuthenticated = $request->user();
+
+        return BedroomService::index($userAuthenticated,$bedroom, $input);
     }
 
     /**
