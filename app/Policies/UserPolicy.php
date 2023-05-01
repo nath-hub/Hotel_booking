@@ -15,6 +15,14 @@ class UserPolicy
     }
 
     /**
+     * Determine whether the user can list all receptionists
+     */
+    public function index(User $user): bool
+    {
+        return $user->is_director;
+    }
+
+    /**
      * Determine if the user can create a receptionist.
      */
     public function createReceptionist(User $user): bool

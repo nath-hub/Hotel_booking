@@ -22,7 +22,7 @@ Route::get('auth/login', [AuthController::class, 'login'])->name('login');
 
 Route::middleware('auth:sanctum')->group(function () {
 
-    Route::apiResource('users', UserController::class)->except(['index', 'show']);
+    Route::apiResource('users', UserController::class)->except(['show']);
 
     Route::apiResource('bedrooms', BedroomController::class)->except(['index', 'show']);
 

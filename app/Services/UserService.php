@@ -6,9 +6,35 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Collection;
 use App\Models\User;
 use App\Models\People;
+use Illuminate\Contracts\Pagination\Paginator;
 
 class UserService
 {
+
+    public function index(User $user, array $input): Paginator
+    {
+
+        $hotelId = $user->people->hotel_id;
+
+        $input['hotel_id'] = $hotelId;
+
+        return User::with('people')
+            ->where('id', '<>', $user->id)
+            ->filter($input)
+            ->orderBy('username')
+            ->paginate(10)
+            ->withQueryString()
+            ->through(fn ($user) => [
+                'id' => $user->id,
+                'username' => $user->username,
+                'email' => $user->email,
+                'avatar_url' => $user->avatar,
+                'firstname' => $user->people->firstname,
+                'lastname' => $user->people->lastname,
+                'type' => $user->people->type,
+                'created_at' => $user->created_at?->format('Y-m-d')
+            ]);
+    }
 
     /**
      * Create a receptionist
@@ -71,7 +97,7 @@ class UserService
 
 
 
-     /**
+    /**
      * Delete a receptionist
      * 
      * @param User $user a director who delete a receptionist
@@ -84,5 +110,4 @@ class UserService
         $userToDelete->delete();
         $userToDelete->people()->delete();
     }
-
 }
