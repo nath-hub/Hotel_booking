@@ -38,9 +38,27 @@ class UserPolicy
     {
         if ($user === null) {
             return true;
-        }else{
+        } else {
             return $user->is_director || $user->is_receptionist;
         }
+    }
+
+    /**
+     * show data for one user
+     */
+    public function show(User $user, User $userToSee)
+    {
+        return $user->is_director && !$userToSee->is_director ||
+            $user->is_receptionist && in_array($userToSee->people->type, ['ADULT', 'CHILD']) ||
+            $user->id === $userToSee->id;
+    }
+
+    /**
+     * check if an user can upload a file
+     */
+    public function uploadAvatar(User $user)
+    {
+        return true;
     }
 
     /**

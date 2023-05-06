@@ -70,6 +70,22 @@ class BedroomService
             'bedroom' => $bedroom
         ];
     }
+    /**
+     * show a bedroom
+     * 
+     * @param User $user the Director who show a bedroom
+     * @param array $input The bedroom data
+     * 
+     * @return array The data of the bedroom
+     */
+    public function show(Bedroom $bedroom)
+    {
+
+        return [
+            'shower_room' => $bedroom->showerRoom,
+            'bedroom' => $bedroom->getAttributes()
+        ];
+    }
 
     public function update(Bedroom $bedroomToUpdate, array $input)
     {

@@ -13,16 +13,16 @@ class BedroomPolicy
      */
     public function index(User $user)
     {
-        #ToDo: See what we nned to do later
+        #ToDo: See what we need to do later
         return true;
     }
 
     /**
      * Determine whether the user can view the model.
      */
-    public function view(User $user, Bedroom $bedroom)
+    public function show(?User $user, Bedroom $bedroom)
     {
-        return $user;
+        return true;
     }
 
     /**

@@ -22,13 +22,17 @@ Route::get('auth/login', [AuthController::class, 'login'])->name('login');
 
 Route::middleware('auth:sanctum')->group(function () {
 
-    Route::apiResource('users', UserController::class)->except(['show']);
+    Route::apiResource('users', UserController::class);
 
-    Route::apiResource('bedrooms', BedroomController::class)->except(['show']);
+    Route::apiResource('bedrooms', BedroomController::class)->except('show');
 
-    Route::apiResource('bookers', BookerController::class)->except(['index', 'store', 'show', 'destroy']);
+    Route::post('users/avatar', [UserController::class, 'uploadAvatar'])->name('users.avatar');
+
+    Route::apiResource('bookers', BookerController::class)->except(['store', 'destroy']);
 
     Route::apiResource('bookings', BookingController::class)->except(['index', 'destroy']);
 });
+
+Route::get('bedrooms/{bedroom}', [BedroomController::class, 'show'])->name('bedrooms.show');
 
 Route::post('bookers/create', [BookerController::class, 'store'])->name('bookers.store');

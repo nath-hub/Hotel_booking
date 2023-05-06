@@ -45,9 +45,16 @@ class BedroomController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Bedroom $room)
+    public function show(Bedroom $bedroom)
     {
-        //
+        $this->authorize('show', $bedroom);
+
+        $data = BedroomService::show($bedroom);
+
+        return response()->json([
+            'code' => 201,
+            'data' => $data
+        ]);
     }
 
     /**

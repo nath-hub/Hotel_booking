@@ -6,7 +6,6 @@ use App\Services\Facades\UserFacade as UserService;
 use App\Http\Requests\UserRequest;
 use App\Models\People;
 use App\Models\User;
-use Illuminate\Support\Facades\Request;
 
 class UserController extends Controller
 {
@@ -55,7 +54,16 @@ class UserController extends Controller
      */
     public function show(User $user)
     {
-        //
+
+        $this->authorize('show', $user);
+
+        $data = UserService::show($user);
+
+
+        return response()->json([
+            'code' => 200,
+            'data' => $data
+        ]);
     }
 
     /**
@@ -72,6 +80,19 @@ class UserController extends Controller
         UserService::update($userAuthenticated, $user, $input);
 
         return response()->json([], 204);
+    }
+
+
+    /**
+     * Update the specified resource in storage.
+     */
+    public function uploadAvatar(UserRequest $request, User $user)
+    {
+        $this->authorize('uploadAvatar', $user);
+
+        $data = UserService::uploadAvatar($request->file('avatar_file'));
+
+        return response()->json($data, 200);
     }
 
     /**

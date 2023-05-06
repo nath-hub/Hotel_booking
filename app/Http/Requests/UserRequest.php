@@ -28,16 +28,26 @@ class UserRequest extends FormRequest
 
         if ($verb === 'POST') {
 
-            return [
-                'username' => 'required|string|unique:users',
-                'firstname' => 'required|string',
-                'lastname' => 'required|string',
-                'email' => 'required|email|unique:users',
-                'password' => 'required|string',
-                'avatar_path' => 'required|string',
-            ];
+            $routeName = $this->route()->getName();
+
+            if ($routeName === 'users.store') {
+
+                return [
+                    'username' => 'required|string|unique:users',
+                    'firstname' => 'required|string',
+                    'lastname' => 'required|string',
+                    'email' => 'required|email|unique:users',
+                    'password' => 'required|string',
+                    'avatar' => 'required|string',
+                ];
+            } elseif ($routeName === 'users.avatar') {
+
+                return [
+                    'avatar_file' => 'required|image'
+                ];
+            }
         } elseif ($verb === 'GET') {
-            
+
             return [
                 'username' => 'string',
                 'firstname' => 'string',
@@ -62,10 +72,10 @@ class UserRequest extends FormRequest
                     Rule::unique('users')->ignore($user->id),
                 ],
                 'password' => 'sometimes|required|string',
-                'avatar_path' => 'sometimes|required|string',
+                'avatar' => 'sometimes|required|image',
             ];
         }
-        
+
         return [];
     }
 }

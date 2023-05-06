@@ -3,10 +3,10 @@
 namespace App\Services;
 
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Collection;
 use App\Models\User;
 use App\Models\People;
 use Illuminate\Contracts\Pagination\Paginator;
+use Illuminate\Http\UploadedFile;
 
 class UserService
 {
@@ -35,7 +35,7 @@ class UserService
                 'id' => $user->id,
                 'username' => $user->username,
                 'email' => $user->email,
-                'avatar_url' => $user->avatar,
+                'avatar_url' => asset($user->avatar),
                 'firstname' => $user->people->firstname,
                 'lastname' => $user->people->lastname,
                 'type' => $user->people->type,
@@ -59,7 +59,7 @@ class UserService
         ]);
 
         $peopleData = $input->only(['firstname', 'lastname', 'type', 'hotel_id'])->all();
-        $userData = $input->only(['username', 'email', 'password', 'avatar_path'])->all();
+        $userData = $input->only(['username', 'email', 'password', 'avatar'])->all();
 
         $userData['password'] = Hash::make($userData['password']);
 
@@ -70,6 +70,22 @@ class UserService
         return [
             'people' => $people,
             'account' => $user
+        ];
+    }
+
+
+    /**
+     * show a user
+     * 
+     * @param User $user the Director who show a user
+     * 
+     * @return array
+     */
+    public function show(User $user): array
+    {
+        return [
+            'people' => $user->people,
+            'account' => $user->getAttributes()
         ];
     }
 
@@ -100,6 +116,25 @@ class UserService
         $userToUpdate->update($userData);
 
         $userToUpdate->people()->update($peopleData);
+    }
+
+
+    /**
+     * Upload user avatar
+     * 
+     * @param UploadedFile $avatarFile The avatar file
+     * 
+     * @return array
+     */
+    public function uploadAvatar(UploadedFile $avatarFile): array
+    {
+
+        $avatarPath = $avatarFile->store('users/avatar', 'public');
+
+        return [
+            'avatar_path' => $avatarPath,
+            'avatar_url' => asset($avatarPath),
+        ];
     }
 
 
