@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\BookingRequest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
+use App\Services\Facades\BookingFacade as BookingService;
 
 class BookingController extends Controller
 {
@@ -21,9 +22,16 @@ class BookingController extends Controller
      */
     public function store(BookingRequest $request)
     {
-        Gate::authorize('create-booking', [$request->user()]);
 
-        dd('TEST !!!');
+        $input = $request->validated();
+
+        $userAuthenticated = $request->user();
+
+        Gate::authorize('create-booking', [$userAuthenticated, $input]);
+
+        $data = BookingService::store($input);
+
+        return $data;
     }
 
     /**

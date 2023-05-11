@@ -2,10 +2,12 @@
 
 namespace App\Models;
 
+use DateTime;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Facades\DB;
 
 class Bedroom extends Model
 {
@@ -40,7 +42,7 @@ class Bedroom extends Model
 
     public function peoples()
     {
-        return $this->belongsToMany(People::class)->withPivot('start_date', 'end_date')->withTimestamps();
+        return $this->belongsToMany(People::class)->withPivot('start_date', 'end_date', 'validated')->withTimestamps();
     }
 
     /*
@@ -57,10 +59,34 @@ class Bedroom extends Model
             $query->where('bed_number', $bed_number);
         })->when($filterCriteria['price'] ?? null, function ($query, $price) {
             $query->where('price', '<=', $price);
-        })->whereHas('showerRoom', function ($query) use ($filterCriteria){
-            $query->when($filterCriteria['type'] ?? null, function($query, $type){
+        })->whereHas('showerRoom', function ($query) use ($filterCriteria) {
+            $query->when($filterCriteria['type'] ?? null, function ($query, $type) {
                 $query->where('type', $type);
             });
         });
+    }
+
+    /*
+    |--------------------------------------------------------------------------
+    | Methods
+    |--------------------------------------------------------------------------
+    */
+
+    public function isAvailability(string $startDate, string $endDate): bool
+    {
+
+        $bookingNumber = DB::table('bedroom_people')
+            ->where('bedroom_id', $this->bedroom_id)
+            ->where('validated', 1)
+            ->where(function (Builder $query) use ($startDate, $endDate) {
+                $query->whereBetween('start_date', [$startDate, $endDate])
+                ->orWhereBetween('end_date', [$startDate, $endDate])
+                ->orWhere(function(Builder $query) use ($startDate, $endDate) {
+                    $query->where('start_date', '<=', $startDate)
+                          ->where('end_date', '>=', $endDate);
+                })
+            })->count();
+
+        return $bookingNumber > 0 ? false : true;
     }
 }

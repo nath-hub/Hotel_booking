@@ -23,20 +23,12 @@ class BookingRequest extends FormRequest
      */
     public function rules(): array
     {
-        // return [
-        //     "bedroom_id" => "required|integer|exists:bedrooms,id",
-        //     "booker_id" => [
-        //         'required',
-        //         'integer',
-        //         Rule::exists('users')->where(function ($query) {
-        //             return $query->join('peoples', 'users.people_id', '=', 'peoples.id')
-        //                 ->where('peoples.type', '<>', 'CHILD')
-        //                 ->whereIsNull('peoples.booker_id');
-        //         }),
-        //     ],
-        //     "start_date" => "required|date|before:end_date",
-        //     "end_date" => "required|date|after:start_date",
-        // ];
+        return [
+            'bedroom_id' => 'required|integer|exists:bedrooms,id',
+            'booker_id' => 'required|integer|exists:users,id',
+            'start_date' => 'required|date|before:end_date',
+            'end_date' => 'required|date|after:start_date',
+        ];
 
         return [];
     }

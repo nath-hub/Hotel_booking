@@ -34,7 +34,7 @@ class People extends Model
 
    public function bedroom()
    {
-      return $this->belongsToMany(Bedroom::class)->withPivot('start_date', 'end_date')->withTimestamps();
+      return $this->belongsToMany(Bedroom::class)->withPivot('start_date', 'end_date', 'validated')->withTimestamps();
    }
 
 

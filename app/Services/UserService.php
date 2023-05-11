@@ -107,7 +107,7 @@ class UserService
 
         if (isset($userData['password'])) {
             if ($userAuthenticated->id !== $userToUpdate->id) {
-                abort(401); #ToDo: Check if abort function works
+                abort(401, 'Unauthorized.'); #ToDo: Check if abort function works
             }
 
             $userData['password'] = Hash::make($userData['password']);
