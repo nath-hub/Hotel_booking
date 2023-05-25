@@ -99,17 +99,6 @@ class User extends Authenticatable
     */
 
 
-    public function scopeValidation($userId)
-    {
-        return DB::table('bedroom_people')
-            ->where('booker_id', $userId)->get();
-
-            #todos : supprimer un user quand il n'a pas de reservation a venir
-            #liste des reservation
-            #afficher le detail d'une reservation
-    }
-
-
     public function scopeFilter(Builder $query, array $filters)
     {
 
