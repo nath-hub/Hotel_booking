@@ -5,6 +5,7 @@ namespace Database\Seeders;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 
 use App\Models\Bedroom;
+use App\Models\Booking;
 use App\Models\Category;
 use App\Models\Hotel;
 use App\Models\People;
@@ -42,5 +43,7 @@ class DatabaseSeeder extends Seeder
         // $bedrooms = Bedroom::factory()->for(ShowerRoom::factory())->for($hotel)->create();
 
         $showerRoom = ShowerRoom::factory()->count(5)->create();
+
+        // $booking = Booking::factory()->count(5)->create();
     }
 }

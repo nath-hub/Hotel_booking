@@ -23,12 +23,24 @@ class BookingRequest extends FormRequest
      */
     public function rules(): array
     {
-        return [
-            'bedroom_id' => 'required|integer|exists:bedrooms,id',
-            'booker_id' => 'required|integer|exists:users,id',
-            'start_date' => 'required|date|before:end_date',
-            'end_date' => 'required|date|after:start_date',
-        ];
+
+        $method = $this->method();
+
+        if ($method === 'POST') {
+            return [
+                'bedroom_id' => 'required|integer|exists:bedrooms,id',
+                'user_id' => 'required|integer|exists:users,id',
+                'start_date' => 'required|date|after_or_equal:now|before:end_date',
+                'end_date' => 'required|date|after:start_date',
+            ];
+        } elseif ($method === 'PUT') {
+            return [
+                'start_date' => 'sometimes|required_with:end_date|date|after_or_equal:now|before:end_date',
+                'end_date' => 'sometimes|required_with:start_date|date|after:start_date',
+                'validated' => 'sometimes|required|boolean'
+            ];
+        }
+
 
         return [];
     }

@@ -2,10 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Booking;
 use App\Services\Facades\UserFacade as UserService;
 use App\Http\Requests\UserRequest;
 use App\Models\People;
 use App\Models\User;
+use Carbon\Carbon;
+use Illuminate\Support\Facades\DB;
 
 class UserController extends Controller
 {
@@ -101,11 +104,11 @@ class UserController extends Controller
     public function destroy(UserRequest $request, User $user)
     {
 
-        $this->authorize('delete', $user);
+       $this->authorize('delete', $user);
 
         $userAutenticated = $request->user();
 
-        UserService::delete($userAutenticated, $user);
+        UserService::delete($user, $userAutenticated);
 
         return response()->json([], 204);
     }

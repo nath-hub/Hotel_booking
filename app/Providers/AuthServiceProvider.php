@@ -23,5 +23,6 @@ class AuthServiceProvider extends ServiceProvider
     public function boot(): void
     {
         Gate::define('create-booking', [BookingPolicy::class, 'create']);
+        Gate::define('update-booking', [BookingPolicy::class, 'update']);
     }
 }

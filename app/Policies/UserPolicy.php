@@ -76,6 +76,7 @@ class UserPolicy
      */
     public function delete(User $user, User $userToDelete)
     {
-        return $user->is_director && $userToDelete->is_receptionist;
+        return $user->is_director && $userToDelete->is_receptionist 
+        || $user->is_director && $userToDelete->is_booker;
     }
 }

@@ -5,12 +5,14 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+
 
 class People extends Model
 {
-    use HasFactory, SoftDeletes;
+   use HasFactory, SoftDeletes;
 
-    protected $table = "peoples";
+   protected $table = "peoples";
 
 
    /**
@@ -32,9 +34,12 @@ class People extends Model
       return $this->hasOne(User::class);
    }
 
-   public function bedroom()
+   public function bedrooms()
    {
-      return $this->belongsToMany(Bedroom::class)->withPivot('start_date', 'end_date', 'validated')->withTimestamps();
+      return $this->belongsToMany(Bedroom::class, 'bedroom_people', 'bedroom_id', 'booker_id')
+         ->using(Booking::class)
+         ->withPivot('start_date', 'end_date', 'validated')
+         ->withTimestamps();
    }
 
 

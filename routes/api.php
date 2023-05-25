@@ -30,7 +30,7 @@ Route::middleware('auth:sanctum')->group(function () {
 
     Route::apiResource('bookers', BookerController::class)->except(['store', 'destroy']);
 
-    Route::apiResource('bookings', BookingController::class)->except(['index', 'destroy']);
+    Route::apiResource('bookings', BookingController::class)->except(['destroy']);
 });
 
 Route::get('bedrooms/{bedroom}', [BedroomController::class, 'show'])->name('bedrooms.show');

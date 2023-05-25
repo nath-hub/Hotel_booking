@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Facades\DB;
 use Laravel\Sanctum\HasApiTokens;
 use Illuminate\Database\Eloquent\Builder;
 
@@ -97,17 +98,27 @@ class User extends Authenticatable
     |--------------------------------------------------------------------------
     */
 
+
+    public function scopeValidation($userId)
+    {
+        return DB::table('bedroom_people')
+            ->where('booker_id', $userId)->get();
+
+            #todos : supprimer un user quand il n'a pas de reservation a venir
+            #liste des reservation
+            #afficher le detail d'une reservation
+    }
+
+
     public function scopeFilter(Builder $query, array $filters)
     {
 
         $query->when($filters['username'] ?? null, function ($query, $username) {
 
             $query->where('username', 'like', '%' . $username . '%');
-
         })->when($filters['email'] ?? null, function ($query, $email) {
 
             $query->where('email', 'like', '%' . $email . '%');
-
         })->whereHas('people', function ($query) use ($filters) {
 
             $query->when($filters['hotel_id'] ?? null, function ($query, $hotelId) {
@@ -119,7 +130,6 @@ class User extends Authenticatable
             })->when($filters['lastname'] ?? null, function ($query, $lastname) {
                 $query->where('lastname', 'like', '%' . $lastname . '%');
             });
-
         });
     }
 }

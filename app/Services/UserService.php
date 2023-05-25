@@ -2,6 +2,8 @@
 
 namespace App\Services;
 
+use Carbon\Carbon;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use App\Models\User;
 use App\Models\People;
@@ -107,7 +109,7 @@ class UserService
 
         if (isset($userData['password'])) {
             if ($userAuthenticated->id !== $userToUpdate->id) {
-                abort(401, 'Unauthorized.'); #ToDo: Check if abort function works
+                abort(401, 'Unauthorized.');
             }
 
             $userData['password'] = Hash::make($userData['password']);
@@ -147,9 +149,19 @@ class UserService
      * 
      * @return void
      */
-    public function delete(User $userAuthenticated, User $userToDelete)
+    public function delete(User $userToDelete, User $userAuthentificated)
     {
-        $userToDelete->delete();
-        $userToDelete->people()->delete();
+
+        $userId = $userToDelete->id;
+
+        $userBookingExisting = DB::table('bedroom_people')->where('booker_id', $userId)
+            ->where('start_date', '>=', Carbon::now())->count();
+
+        if ($userBookingExisting <= 0) {
+            $userToDelete->delete();
+            $userToDelete->people()->delete();
+        } else {
+            abort(400, 'this user can\'t be deleted because he has an upcoming booking');
+        }
     }
 }
