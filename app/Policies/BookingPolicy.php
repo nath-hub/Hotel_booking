@@ -27,9 +27,14 @@ class BookingPolicy
       /**
      * Determine if the user can show one booking.
      */
-    public function show(User $user): bool
+    public function show(User $user, Booking $booking): bool
     {
-        return true;
+
+        $booking->load('people.user');
+
+        return $user->is_director ||
+            $user->is_receptionist ||
+            $user->id = $booking->people->user->id;
     }
 
 
