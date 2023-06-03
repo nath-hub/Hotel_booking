@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('bedroom_id');
             $table->enum('type', ['SHOWER', 'BATHTUB']);
+            $table->string('imagesShower');
 
             $table->index(['bedroom_id'], "fk_showerroom_bedroom");
             

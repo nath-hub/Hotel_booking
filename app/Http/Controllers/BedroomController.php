@@ -42,6 +42,21 @@ class BedroomController extends Controller
         ];
     }
 
+
+    /**
+     * Update the specified resource in storage.
+     */
+    public function uploadFileBedroom(BedroomRequest $request, Bedroom $bedroom)
+    {
+        $this->authorize('uploadFileBedroom', $bedroom);
+
+        $data = BedroomService::uploadFileBedroom($request->file('images'), $request->file('imagesShower'));
+
+        return response()->json($data, 200);
+    }
+
+
+
     /**
      * Display the specified resource.
      */

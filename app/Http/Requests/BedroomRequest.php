@@ -27,12 +27,25 @@ class BedroomRequest extends FormRequest
 
         if ($verb === 'POST') {
 
-            return [
-                'code' => 'required|string|unique:bedrooms',
-                'bed_number' => 'required|integer',
-                'price' => 'required|integer',
-                'type' => 'required|in:SHOWER,BATHTUB',
-            ];
+            $routeName = $this->route()->getName();
+
+            if ($routeName === 'bedrooms.images') {
+
+                return [
+                    'images' => 'required|image',
+                    'imagesShower' => 'required|image',
+                ];
+            } else {
+
+                return [
+                    'code' => 'required|string|unique:bedrooms',
+                    'bed_number' => 'required|integer',
+                    'price' => 'required|integer',
+                    'type' => 'required|in:SHOWER,BATHTUB',
+                    'images' => 'required|string',
+                    'imagesShower' => 'required|string',
+                ];
+            };
         } elseif ($verb === 'GET') {
 
             return [
@@ -52,6 +65,8 @@ class BedroomRequest extends FormRequest
                 'bed_number' => 'sometimes|required|integer',
                 'price' => 'sometimes|required|integer',
                 'type' => 'sometimes|required|in:SHOWER,BATHTUB',
+                'images' => 'sometimes|required|string',
+                'imagesShower' => 'sometimes|required|string',
             ];
         }
 

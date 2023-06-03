@@ -41,6 +41,14 @@ class BedroomPolicy
         return $user->is_director;
     }
 
+        /**
+     * check if an user can upload a file
+     */
+    public function uploadFileBedroom(User $user)
+    {
+        return true;
+    }
+
     /**
      * Determine whether the user can delete the model.
      */

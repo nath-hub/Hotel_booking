@@ -17,6 +17,7 @@ return new class extends Migration
             $table->string('code')->unique();
             $table->integer('bed_number');
             $table->integer('price');
+            $table->string('images');
             
             $table->index(["hotel_id"], "fk_bedroom_hotel");
 

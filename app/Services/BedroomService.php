@@ -2,12 +2,10 @@
 
 namespace App\Services;
 
-use App\Http\Requests\BedroomRequest;
 use App\Models\Bedroom;
-use Illuminate\Support\Collection;
 use App\Models\User;
-use App\Models\ShowerRoom;
 use Illuminate\Contracts\Pagination\Paginator;
+use Illuminate\Http\UploadedFile;
 
 class BedroomService
 {
@@ -58,8 +56,8 @@ class BedroomService
 
         $input = collect($input);
 
-        $bedroomData = $input->only(['code', 'bed_number', 'price', 'hotel_id'])->all();
-        $showerRoomData = $input->only(['type'])->all();
+        $bedroomData = $input->only(['code', 'bed_number', 'price', 'images', 'hotel_id'])->all();
+        $showerRoomData = $input->only(['type', 'imagesShower'])->all();
 
         $bedroom = Bedroom::create($bedroomData);
 
@@ -70,6 +68,30 @@ class BedroomService
             'bedroom' => $bedroom
         ];
     }
+
+
+        /**
+     * Upload user avatar
+     * 
+     * @param UploadedFile $avatarFile The avatar file
+     * 
+     * @return array
+     */
+    public function uploadFileBedroom(UploadedFile $imageBedroom, UploadedFile $imageShower): array
+    {
+
+        $bedroomPath = $imageBedroom->store('bedroom/images', 'public');
+        $showerPath = $imageShower->store('showerRoom/images', 'public');
+
+        return [
+            'shower_path' => $showerPath,
+            'shower_url' => asset($showerPath),
+            'bedroom_path' => $bedroomPath,
+            'bedroom_url' => asset($bedroomPath),
+        ];
+    }
+
+
     /**
      * show a bedroom
      * 

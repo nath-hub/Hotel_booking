@@ -26,6 +26,8 @@ Route::middleware('auth:sanctum')->group(function () {
 
     Route::apiResource('bedrooms', BedroomController::class)->except('show');
 
+    Route::post('bedrooms/images', [BedroomController::class, 'uploadFileBedroom'])->name('bedrooms.images');
+
     Route::post('users/avatar', [UserController::class, 'uploadAvatar'])->name('users.avatar');
 
     Route::apiResource('bookers', BookerController::class)->except(['store', 'destroy']);
