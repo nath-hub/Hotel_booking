@@ -3,6 +3,7 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -120,5 +121,24 @@ class User extends Authenticatable
                 $query->where('lastname', 'like', '%' . $lastname . '%');
             });
         });
+    }
+
+    /*
+    |--------------------------------------------------------------------------
+    | Methods
+    |--------------------------------------------------------------------------
+    */
+
+    public function hasUpcomingBookings(): bool
+    {
+
+        $bookerId = $this->people->id;
+
+        $bookingNumber = DB::table('bedroom_people')
+            ->where('booker_id', $bookerId)
+            ->where('start_date', '>=', Carbon::today())
+            ->count();
+
+        return $bookingNumber > 0 ? true : false;
     }
 }

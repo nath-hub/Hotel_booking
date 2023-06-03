@@ -60,7 +60,7 @@ class BedroomRequest extends FormRequest
                 'code' =>  [
                     'sometimes',
                     'required',
-                    Rule::unique('bedrooms')->ignore($this->bedroom->id),
+                    Rule::unique('bedrooms')->ignore($this->route('bedroom')->id),
                 ],
                 'bed_number' => 'sometimes|required|integer',
                 'price' => 'sometimes|required|integer',

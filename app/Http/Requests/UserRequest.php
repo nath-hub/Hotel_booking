@@ -56,7 +56,7 @@ class UserRequest extends FormRequest
             ];
         } else {
 
-            $user = $this->user();
+            $user = $this->route('user');
 
             return [
                 'username' => [

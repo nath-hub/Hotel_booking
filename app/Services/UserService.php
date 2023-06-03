@@ -13,12 +13,12 @@ use Illuminate\Http\UploadedFile;
 class UserService
 {
     /**
-     * list a receptionist
+     * Returns a paginated list of users based on critria
      * 
-     * @param User $user the Director who create a receptionnist
-     * @param array $input The receptionist data
+     * @param User $user want to display the list
+     * @param array $input The filter data
      * 
-     * @return array The newly created data of the receptionist
+     * @return Paginator a paginate list of users
      */
     public function index(User $user, array $input): Paginator
     {
@@ -152,16 +152,13 @@ class UserService
     public function delete(User $userToDelete, User $userAuthentificated)
     {
 
-        $userId = $userToDelete->id;
+        if (!$userToDelete->hasUpcomingBookings()) {
 
-        $userBookingExisting = DB::table('bedroom_people')->where('booker_id', $userId)
-            ->where('start_date', '>=', Carbon::now())->count();
-
-        if ($userBookingExisting <= 0) {
             $userToDelete->delete();
             $userToDelete->people()->delete();
         } else {
-            abort(400, 'this user can\'t be deleted because he has an upcoming booking');
+
+            abort(400, 'This user can\'t be deleted because he has an upcoming booking');
         }
     }
 }

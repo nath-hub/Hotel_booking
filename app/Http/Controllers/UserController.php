@@ -108,7 +108,7 @@ class UserController extends Controller
 
         $userAutenticated = $request->user();
 
-        UserService::delete($user, $userAutenticated);
+        UserService::delete($userAutenticated, $user);
 
         return response()->json([], 204);
     }

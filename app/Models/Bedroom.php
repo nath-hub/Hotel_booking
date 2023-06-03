@@ -77,11 +77,7 @@ class Bedroom extends Model
 
     public function isAvailability(string $startDate, string $endDate, ?string $bookingId): bool
     {
-        $bookingNumber = DB::table('bedroom_people')
-            ->when($bookingId, function ($query, $bookingId) {
-                $query->where('id', '<>', $bookingId);
-            })
-            ->where('bedroom_id', $this->id)
+        $bookingNumber = Booking::where('bedroom_id', $this->id)
             ->where('validated', 1)
             ->where(function (Builder $query) use ($startDate, $endDate) {
                 $query->whereBetween('start_date', [$startDate, $endDate])
@@ -90,7 +86,11 @@ class Bedroom extends Model
                         $query->where('start_date', '<=', $startDate)
                             ->where('end_date', '>=', $endDate);
                     });
-            })->count();
+            })
+            ->when($bookingId, function ($query, $bookingId) {
+                $query->where('id', '<>', $bookingId);
+            })
+            ->count();
 
         return $bookingNumber > 0 ? false : true;
     }

@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\BookingRequest;
 use App\Models\Booking;
-use Illuminate\Support\Facades\Gate;
 use App\Services\Facades\BookingFacade as BookingService;
 
 class BookingController extends Controller
@@ -12,11 +11,16 @@ class BookingController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(BookingRequest $request)
     {
-        $this->authorize('index', User::class);
 
-        return BookingService::index();
+        $this->authorize('index', Booking::class);
+
+        $input = $request->validated();
+
+        $userAuthenticated = $request->user();
+
+        return BookingService::index($userAuthenticated, $input);
     }
 
     /**
@@ -27,7 +31,7 @@ class BookingController extends Controller
 
         $input = $request->validated();
 
-        Gate::authorize('create-booking', [$input]);
+        $this->authorize('create', [Booking::class, $input]);
 
         $userAuthenticated = $request->user();
 
@@ -41,7 +45,7 @@ class BookingController extends Controller
      */
     public function show(Booking $booking)
     {
-        $this->authorize('show', $booking);
+        $this->authorize('show', [$booking]);
 
         return BookingService::show($booking);
     }
@@ -54,7 +58,7 @@ class BookingController extends Controller
 
         $input = $request->validated();
 
-        Gate::authorize('update-booking', [$booking, $input]);
+        $this->authorize('update', [$booking, $input]);
 
         $data = BookingService::update($booking, $input);
 

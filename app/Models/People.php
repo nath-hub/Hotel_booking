@@ -12,7 +12,7 @@ class People extends Model
 {
    use HasFactory, SoftDeletes;
 
-   protected $table = "peoples";
+   protected $table = 'peoples';
 
 
    /**
@@ -45,7 +45,7 @@ class People extends Model
 
    public function companions()
    {
-      return $this->hasMany(People::class, "booker_id");
+      return $this->hasMany(People::class, 'booker_id');
    }
 
 

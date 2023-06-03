@@ -6,37 +6,63 @@ use App\Models\Bedroom;
 use App\Models\Booking;
 use App\Models\User;
 use Carbon\Carbon;
-use Illuminate\Support\Facades\DB;
+use Illuminate\Contracts\Pagination\Paginator;
 
 class BookingService
 {
+
     /**
-     * show all booking
+     * Returns a paginated list of bookings based on critria
      * 
-     * @return array
+     * @param User $user want to display the list
+     * @param array $input The filter data
+     * 
+     * @return Paginator a paginate list of booking
      */
-    public function index()
+    public function index(User $user, array $input): Paginator
     {
 
-        $allBooking = DB::table('bedroom_people')
-            ->where('start_date', '>=', Carbon::now())->get();
+        $hotelId = $user->people->hotel_id;
 
-        return [$allBooking];
+        $input['hotel_id'] = $hotelId;
+
+        if ($user->is_booker) {
+            $input['user_id'] = $user->id;
+        }
+
+        return Booking::with(['people.user', 'bedroom.showerRoom'])
+            ->filter($input)
+            ->orderBy('start_date')
+            ->paginate(10)
+            ->withQueryString()
+            ->through(fn ($booking) => [
+                'booking' => $booking->getAttributes(),
+                'user' => $booking->people->user,
+                'booker' => $booking->people->getAttributes(),
+                'bedroom' => $booking->bedroom->getAttributes(),
+                'shower_room' => $booking->bedroom->showerRoom,
+            ]);
     }
 
 
     /**
-     * show one booking
+     * show booking information
      * 
-     * @return string
+     * @return array
      */
     public function show($booking)
     {
 
-        $allBooking = DB::table('bedroom_people')->where('id', $booking->id)
-            ->where('start_date', '>=', Carbon::now())->get();
+        $booking->load(['people.user', 'bedroom.showerRoom', 'companions']);
 
-        return $allBooking;
+        return [
+            'booking' => $booking->getAttributes(),
+            'user' => $booking->people->user,
+            'booker' => $booking->people->getAttributes(),
+            'bedroom' => $booking->bedroom->getAttributes(),
+            'shower_room' => $booking->bedroom->showerRoom,
+            'companions' => $booking->companions
+        ];
     }
 
 
