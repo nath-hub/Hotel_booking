@@ -39,19 +39,15 @@ Route::get('/listen-sse-message', function () {
 
     // Set the appropriate headers for SSE
     $response = new StreamedResponse(function () use ($message) {
-        
-            // Your server-side logic to get data
-            $data = json_encode(['message' => $message]);
 
-            echo "data: $data\n\n";
+        // Your server-side logic to get data
+        $data = json_encode(['message' => $message]);
 
-            // Flush the output buffer
-            ob_flush();
-            flush();
+        echo "data: $data\n\n";
 
-            // Delay for 1 second
-            sleep(1);
-        
+        // Flush the output buffer
+        ob_flush();
+        flush();
     });
 
     $response->headers->set('Content-Type', 'text/event-stream');
