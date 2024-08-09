@@ -21,7 +21,11 @@
         // Event when receiving a message from the server
         eventSource.onmessage = function(event) {
             // Append the message to the ordered list
-            document.getElementById("list").innerHTML += '<li>' + event.data + "</li>";
+            var data = JSON.parse(event.data);
+
+            if (data.message) {
+                document.getElementById("list").innerHTML += '<li>' + data.message + "</li>";
+            }
         };
     </script>
 </body>

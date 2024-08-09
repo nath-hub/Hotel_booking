@@ -33,7 +33,7 @@ Route::get('/set-sse-message', function (Request $request) {
 
 Route::get('/listen-sse-message', function () {
 
-    $message = Cache::get('message', 'None message');
+    $message = Cache::get('message');
 
     Cache::clear();
 
