@@ -6,6 +6,9 @@ use App\Http\Controllers\BedroomController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\BookerController;
 use App\Http\Controllers\BookingController;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
+use Symfony\Component\HttpFoundation\StreamedResponse;
 
 /*
 |--------------------------------------------------------------------------
@@ -19,6 +22,44 @@ use App\Http\Controllers\BookingController;
 */
 
 Route::get('auth/login', [AuthController::class, 'login'])->name('login');
+
+Route::get('/set-sse-message', function (Request $request) {
+    $message = $request->input('message');
+
+    Cache::set('message', $message);
+
+    return response()->json(['message' => 'OK']);
+});
+
+Route::get('/listen-sse-message', function () {
+
+    $message = Cache::get('message', 'None message');
+
+    Cache::clear();
+
+    // Set the appropriate headers for SSE
+    $response = new StreamedResponse(function () use ($message) {
+        
+            // Your server-side logic to get data
+            $data = json_encode(['message' => $message]);
+
+            echo "data: $data\n\n";
+
+            // Flush the output buffer
+            ob_flush();
+            flush();
+
+            // Delay for 1 second
+            sleep(1);
+        
+    });
+
+    $response->headers->set('Content-Type', 'text/event-stream');
+    $response->headers->set('Cache-Control', 'no-cache');
+    $response->headers->set('Connection', 'keep-alive');
+
+    return $response;
+});
 
 Route::middleware('auth:sanctum')->group(function () {
 
